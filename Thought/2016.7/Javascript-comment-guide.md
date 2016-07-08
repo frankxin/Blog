@@ -10,6 +10,25 @@ Tag，形如`@type`|`@param`|`@constructor`|`@extends`, 是对一段代码的打
 Tag | Description
 ----|------------
 @author | 作者
+@const | 常量
+@constructor | 构造器
+@define | 定义变量，属性
+@deprecated | 被废除的方法
+@extends | 从哪里扩展
+@fileoverview | 文件整体描述
+@interface | 接口
+@override | 覆盖，重写
+@param | 参数
+@return | 返回值
+@see | reference
+@supported | 兼容性，支持程度
+@this | 上下文环境
+@sideeffects | 有副作用的函数
+
+### Type table
+
+
+
 
 
 
