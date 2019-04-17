@@ -1,0 +1,10 @@
+.articles > li {
+  list-style: none;
+}
+.articles .article__title{
+
+}
+.articles .article__title > a {
+  text-decoration: none;
+  color: #000000;
+}
