@@ -8,7 +8,7 @@
     "dev": "node --nolazy --inspect-brk=9229 app.js",
     "tsc": "tsc -w",
     "webpack": "webpack --watch --config ./frontend/webpack.config.js",
-    "server": "node app.js"
+    "build": "tsc && webpack --config ./frontend/webpack.config.js"
   },
   "repository": {
     "type": "git",
