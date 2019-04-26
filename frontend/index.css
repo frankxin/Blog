@@ -1,3 +1,13 @@
+#app {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+nav .link-to-home{
+  text-decoration: none;
+  color: #000000;
+}
+
 .articles > li {
   list-style: none;
 }

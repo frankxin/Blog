@@ -1,6 +1,6 @@
 ---
 title: 组织 Typescript 类型定义实践
-date: 2018-10-30 10:19:30
+date: 2018-10-30
 tags: ["Typescript"]
 ---
 
