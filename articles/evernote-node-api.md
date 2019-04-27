@@ -20,7 +20,7 @@ tags: ["青涩的老文章"]
 ### 第一坑：
 
 首先，你要知道所有你调用的Node API的回调函数中的传入参数中error必须是第一个
-![Evernote NodeJS API](../static/images/node-api.png)
+![Evernote NodeJS API](/static/images/node-api.png)
 这是印象笔记官网上的实例教程，你如果复制粘贴到你的代码中，你得到的结果一定是`undefined`
 这是为什么呢，因为他传入回调函数的参数少了一个error…这个bug让我一开始找到死啊。。
 
@@ -45,7 +45,7 @@ bodyHash数组转16进制字符串
 
 关于oauth认证的官方github的example中已经写的很清楚了，那么坑在哪呢? 坑在你从evernote官网上申请的基本权限的api是不够用的，有些函数访问不了，而你用developeToken的时候就不会出现这种问题，如果你发现抛出错误的errorCode为3,那么很有可能就是这个问题
 
-![](../static/images/api_permissions.png)
+![](/static/images/api_permissions.png)
 
 欢迎大家一起来讨论，说的不对的地方也请指出，谢谢~
 
