@@ -12,7 +12,7 @@ class App extends React.Component {
       <div>
         <nav>
           <Link className="link-to-home" to="/">
-            <h2>FrankZx</h2>
+            <h2>Frankxin</h2>
           </Link>
         </nav>
         <Switch>

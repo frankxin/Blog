@@ -6,6 +6,7 @@ import 'regenerator-runtime/runtime';
 import * as marked from 'marked'
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css'
+import './index.css';
 
 interface ArticleProps {
     match: match<{ id: string }>
@@ -13,7 +14,11 @@ interface ArticleProps {
 interface ArticleState {
     id: string,
     content: string,
-    date: string
+    metaData: {
+        title: string,
+        date: string,
+        tag: string
+    }
 }
 export class Article extends React.Component<ArticleProps, ArticleState> {
     constructor(props: ArticleProps) {
@@ -21,11 +26,14 @@ export class Article extends React.Component<ArticleProps, ArticleState> {
         this.state = {
             id: '',
             content: '',
-            date: ''
+            metaData: {
+                title: '',
+                date: '',
+                tag: ''
+            }
         }
     }
     async componentDidMount() {
-        loadDisqus(this.props.match.params.id)
         let res = await http.get(`/v1/articles/${this.props.match.params.id}`);
         const renderer = new marked.Renderer()
         const highlight = (code, lang) => {
@@ -42,29 +50,30 @@ export class Article extends React.Component<ArticleProps, ArticleState> {
                     code = out;
                 }
             }
-
+            
             if (!lang) {
                 return '<pre><code>'
-                    + (escaped ? code : _.escape(code))
-                    + '</code></pre>';
-            }
-
-            return '<pre class="'
-                + langPrefix
-                + _.escape(lang) +
-                '"><code class="'
-                + langPrefix
-                + _.escape(lang)
-                + '">'
                 + (escaped ? code : _.escape(code))
-                + '</code></pre>\n';
+                + '</code></pre>';
+            }
+            
+            return '<pre class="'
+            + langPrefix
+            + _.escape(lang) +
+            '"><code class="'
+            + langPrefix
+            + _.escape(lang)
+            + '">'
+            + (escaped ? code : _.escape(code))
+            + '</code></pre>\n';
         };
-        let { info, removedInfoMarkdown } = extractInfoFromMarkdown(res.data.article)
-
+        
         this.setState({
-            content: marked(removedInfoMarkdown, { renderer }),
-            date: info.date
+            content: marked(res.data.content, { renderer }),
+            metaData: res.data.metaData
         })
+
+        loadDisqus(this.props.match.params.id, res.data.metaData.title)
     }
 
     componentDidUpdate(prevProps: ArticleProps, prevState: ArticleState) {
@@ -72,7 +81,7 @@ export class Article extends React.Component<ArticleProps, ArticleState> {
             http.get(`/v1/articles/${this.props.match.params.id}`)
                 .then(res => {
                     this.setState({
-                        content: marked(res.data.article)
+                        content: marked(res.data.content)
                     })
                 })
         }
@@ -87,8 +96,8 @@ export class Article extends React.Component<ArticleProps, ArticleState> {
     render() {
         return (
             <div>
-                <div>{this.state.date}</div>
-                <main dangerouslySetInnerHTML={this.createMarkup()}></main>
+                <div>{this.state.metaData.date}</div>
+                <main className="content" dangerouslySetInnerHTML={this.createMarkup()}></main>
                 <div id="disqus_thread"></div>
             </div>
         )
@@ -96,30 +105,10 @@ export class Article extends React.Component<ArticleProps, ArticleState> {
 
 }
 
-function extractInfoFromMarkdown(md: string): {
-    info: {
-        title: string,
-        date: string,
-        tag: string
-    },
-    removedInfoMarkdown: string
-} {
-    let info = {} as any
-    let removedInfoMarkdown = ''
-    for (let v of ['title', 'date', 'tag']) {
-        let reg = new RegExp(`-{3,}[\\s\\S]+${v}:\\s*([\\s\\S]+?)\\n[\\s\\S]+-{3,}`)
-        let mdMatch = md.match(reg);
-        if (mdMatch) {
-            info[v] = mdMatch[1] || ''
-        }
-    }
-    removedInfoMarkdown = md.replace(/-{3,}[\s\S]+?-{3,}/, '')
-    return { info, removedInfoMarkdown }
-}
-
-function loadDisqus(id: string): void {
+function loadDisqus(id: string, title: string): void {
     window.disqus_config = function () {
-        this.page.url = '127.0.0.1:3000';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.title = title;
+        this.page.url = location.href;  // Replace PAGE_URL with your page's canonical URL variable
         this.page.identifier = id; // Replace PAGE_DENTIFIER with your page's unique identifier variable
     };
 

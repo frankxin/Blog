@@ -12,8 +12,13 @@ app.set('views', './views')
 app.set('view engine', 'ejs')
 
 app.get('/v1/articles/:articleId', function (req, res) {
+  const md = fs.readFileSync(`./articles/${req.params.articleId}.md`).toString()
+  let result = extractArticleMetadata(md)
   res.send({
-    article: fs.readFileSync(`./articles/${req.params.articleId}.md`).toString()
+    content: result.content,
+    metaData: Object.assign(result.info, {
+      date: moment(result.info.date).format('DD MMM YYYY')
+    })
   })
   // res.render('index', {title: 'ZxinZ', main: marked(fs.readFileSync(`./articles/${req.params.articleId}.md`).toString())})
 });
@@ -48,8 +53,8 @@ app.get('*', (req,res) =>{
   }
 });
 
-app.listen(80, function () {
-  console.log('App listening on port 80!');
+app.listen(8080, function () {
+  console.log('App listening on port 8080!');
 });
 
 function extractArticleMetadata(md: string){
