@@ -11,3 +11,9 @@ main.content blockquote {
 main.content p {
   margin: 0;
 }
+
+main.content .anchor {
+  float: left;
+  padding-right: 4px;
+  margin-left: -20px;
+}
