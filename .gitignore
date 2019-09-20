@@ -3,9 +3,6 @@ Thumbs.db
 db.json
 *.log
 node_modules/
-/public/*
-!/public/images
-.deploy*/
-.history
-**/*.js
-**/*.js.map
+public/
+.deploy*/%
+.deploy_git/
